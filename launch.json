@@ -1,0 +1,28 @@
+{
+  "kind": "univ4_hook",
+  "hook": {
+    "contract": "ReferralHook",
+    "constructorArgs": [
+      "0xE03A1074c86CFeDd5C142C4F04F1a1536e203543"
+    ],
+    "permissions": [
+      "beforeSwap",
+      "afterSwap",
+      "beforeSwapReturnDelta",
+      "afterSwapReturnDelta"
+    ]
+  },
+  "token": {
+    "contract": "REFR",
+    "name": "Referral",
+    "symbol": "REFR",
+    "decimals": 18
+  },
+  "pool": {
+    "pairedCurrency": "0x0000000000000000000000000000000000000000",
+    "fee": 3000,
+    "tickSpacing": 60,
+    "initialPrice": "2505036234966386302045715536678303"
+  },
+  "notes": "Sources: src/ReferralHook.sol and src/REFR.sol; ABI exports: docs/abi/ReferralHook.json and docs/abi/REFR.json. ReferralHook takes only the approved Sepolia PoolManager address; REFR has no constructor arguments. The four enabled permissions correspond to low address bits 0x00cc; all other permissions are false and the hook constructor validates the address bits. The pool orders native ETH as currency0 and REFR as currency1. initialPrice is decimal sqrtPriceX96 at tick 207240, matching test/helpers/LaunchFactory.sol and its token-only seed rehearsal with no initial ETH. Initialization and liquidity callbacks are disabled. The hook charges a constant 20 bps on the ETH fee base only for a valid referrer. Exactly 32 bytes of canonical ABI address data are accepted; zero, tx.origin, the hook and PoolManager are excluded. For exact-input buys and exact-output sells, the base is abs(amountSpecified) and beforeSwap returns the positive specified fee delta. For exact-output buys and exact-input sells, the base is the absolute pool ETH delta and afterSwap returns the positive unspecified fee delta. Fees round down; zero rewards remain zero. Partial fills revert. Swap fees mint ETH ERC-6909 claims to the hook; claim() zeros the caller's balance before unlocking, burning claims and taking ETH for that caller. Callbacks require PoolManager. Pools without native ETH as currency0 have no hook effect. Claim balances, volumes and counts aggregate by referrer across supported pools; poolReferrals stores per-PoolId statistics. The tx.origin exclusion is bypassable with a second wallet and hookData is unauthenticated. Ordinary swaps and claims preserve equality between ETH claims and referral debt; unsolicited ERC-6909 donations can create inaccessible surplus, qualifying the workflow's unconditional equality requirement. This is a technical manifest, not deployment authorization. Launch policy and signed artifact linkage are maintained separately by services; local rehearsal does not establish independent review or live deployment."
+}
